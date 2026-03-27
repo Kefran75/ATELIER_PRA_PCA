@@ -230,28 +230,32 @@ Faites preuve de pédagogie et soyez clair dans vos explications et procedures d
 
 **Exercice 1 :**  
 Quels sont les composants dont la perte entraîne une perte de données ?  
-  
-*..Répondez à cet exercice ici..*
+  Le pra-data, Le pra-backup, La perte du pod
 
 **Exercice 2 :**  
 Expliquez nous pourquoi nous n'avons pas perdu les données lors de la supression du PVC pra-data  
-  
-*..Répondez à cet exercice ici..*
+Nous n'avons pas perdu definitivement les donnees parque qu'il y avait des sauvegardes automatiques, un CronJob copie la base de donnees du volume pra-data vers le volume pra-backup
 
 **Exercice 3 :**  
 Quels sont les RTO et RPO de cette solution ?  
-  
-*..Répondez à cet exercice ici..*
+  Si il y a crash du pod , le pod redemarre automatiquement en quelques secondes le RTO est tres faible et le RPO est nul
+  Si il y a perte du PVC, il faut recreer le volume puis restaurer la sauvegarde , le RTO de quelques minutes , RPO d'environ 1 minute car une sauvegarde est faite chaque minute 
 
 **Exercice 4 :**  
 Pourquoi cette solution (cet atelier) ne peux pas être utilisé dans un vrai environnement de production ? Que manque-t-il ?   
-  
-*..Répondez à cet exercice ici..*
+  Cette solution ne peut etre utilise dans un vrai environnement car elle n'est pas adaptee avec beaucoup d'utilisateurs , ensuite les sauvegardes sont stockees dans le meme environnement Kubernetes. Donc si tout le cluster tombe on risque de perdre a la fois les donnees et les sauvegardes et la restauration est manuelle et prends du temps 
+
+  Il manque donc : une base de donnees plus robuste, des sauvegardes stockees a l'exterieur du cluster , plus d'automatisation , de la replication, une meilleure haute disponibilite 
   
 **Exercice 5 :**  
 Proposez une archtecture plus robuste.   
-  
-*..Répondez à cet exercice ici..*
+  Une architecture plus robuste serait : 
+  - plusieurs pods flask au lieu d'un seul
+  - une vraie base de donnees comme PostgreSQL
+  - des sauvegardes envoyees vers un stockage externe
+  - unstockage plus fiable
+  - un second cluster
+  - des outils de supervision et d'alerte
 
 ---------------------------------------------------
 Séquence 6 : Ateliers  
